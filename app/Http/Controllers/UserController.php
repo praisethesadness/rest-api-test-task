@@ -5,65 +5,35 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CreateUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
+use App\Services\UserService;
 
 class UserController extends Controller
 {        
-    public function __construct()
+    private $userService;
+
+    public function __construct(UserService $userService)
     {
         $this->middleware('auth:api')->except('store');
+        $this->userService = $userService;
     }
 
     public function store(CreateUserRequest $request)
     {
-        try {
-            $user = User::create($request->validated());
-            auth()->login($user);
-        } catch (\Throwable $th) {
-            return response(
-                ['error' => 'INTERNAL_ERROR'],
-                status: 500
-            );
-        }        
-
-        return $user;
+        return $this->userService->createAndLogin($request);
     }
     
     public function show()
     {
-        try {
-            return auth()->user();
-        } catch (\Throwable $th) {
-            return response(
-                ['error' => 'INTERNAL_ERROR'],
-                status: 500
-            );
-        }
+        return $this->userService->getUser();
     }
 
     public function update(UpdateUserRequest $request)
     {
-        try {
-            $user = User::find(auth()->id());
-            $user->update($request->validated());
-        } catch (\Throwable $th) {
-            return response(
-                ['error' => 'INTERNAL_ERROR'],
-                status: 500
-            );
-        }        
-
-        return $user;
+        return $this->userService->updateUser($request);
     }
     
     public function destroy()
     {
-        try {
-            User::find(auth()->id())->delete();
-        } catch (\Throwable $th) {
-            return response(
-                ['error' => 'INTERNAL_ERROR'],
-                status: 500
-            );
-        }        
+        return $this->userService->deleteUser();     
     }
 }
