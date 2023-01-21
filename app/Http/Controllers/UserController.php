@@ -5,32 +5,35 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CreateUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
+use App\Services\UserService;
 
 class UserController extends Controller
 {        
+    private $userService;
+
+    public function __construct(UserService $userService)
+    {
+        $this->middleware('auth:api')->except('store');
+        $this->userService = $userService;
+    }
+
     public function store(CreateUserRequest $request)
     {
-        $user = User::create($request->validated());
-        auth()->login($user);
-
-        return $user;
+        return $this->userService->createAndLogin($request);
     }
     
     public function show()
     {
-        return auth()->user();
+        return $this->userService->getUser();
     }
 
     public function update(UpdateUserRequest $request)
     {
-        $user = User::find(auth()->id());
-        $user->update($request->validated());
-
-        return $user;
+        return $this->userService->updateUser($request);
     }
     
     public function destroy()
     {
-        User::find(auth()->id())->delete();
+        return $this->userService->deleteUser();     
     }
 }
