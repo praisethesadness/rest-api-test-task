@@ -8,29 +8,62 @@ use App\Models\User;
 
 class UserController extends Controller
 {        
+    public function __construct()
+    {
+        $this->middleware('auth:api')->except('store');
+    }
+
     public function store(CreateUserRequest $request)
     {
-        $user = User::create($request->validated());
-        auth()->login($user);
+        try {
+            $user = User::create($request->validated());
+            auth()->login($user);
+        } catch (\Throwable $th) {
+            return response(
+                ['error' => 'INTERNAL_ERROR'],
+                status: 500
+            );
+        }        
 
         return $user;
     }
     
     public function show()
     {
-        return auth()->user();
+        try {
+            return auth()->user();
+        } catch (\Throwable $th) {
+            return response(
+                ['error' => 'INTERNAL_ERROR'],
+                status: 500
+            );
+        }
     }
 
     public function update(UpdateUserRequest $request)
     {
-        $user = User::find(auth()->id());
-        $user->update($request->validated());
+        try {
+            $user = User::find(auth()->id());
+            $user->update($request->validated());
+        } catch (\Throwable $th) {
+            return response(
+                ['error' => 'INTERNAL_ERROR'],
+                status: 500
+            );
+        }        
 
         return $user;
     }
     
     public function destroy()
     {
-        User::find(auth()->id())->delete();
+        try {
+            User::find(auth()->id())->delete();
+        } catch (\Throwable $th) {
+            return response(
+                ['error' => 'INTERNAL_ERROR'],
+                status: 500
+            );
+        }        
     }
 }
