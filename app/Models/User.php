@@ -22,4 +22,9 @@ class User extends Authenticatable
         'username',
         'email',        
     ];
+
+    public function favouriteQuotes()
+    {
+        return $this->belongsToMany(Quote::class);
+    }
 }
