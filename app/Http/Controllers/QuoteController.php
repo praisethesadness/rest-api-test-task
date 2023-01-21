@@ -23,38 +23,17 @@ class QuoteController extends Controller
 
     public function addToFavourites($id)
     {
-        try {
-            $this->quotesService->addToFavourites($id);
-        } catch (\Throwable $th) {
-            return response(
-                ['error' => 'INTERNAL_ERROR'],
-                status: 500
-            );
-        }
+        return $this->quotesService->addToFavourites($id);
     }
 
     public function removeFromFavourites($id)
     {
-        try {
-            $this->quotesService->removeFromFavourites($id);
-        } catch (\Throwable $th) {
-            return response(
-                ['error' => 'INTERNAL_ERROR'],
-                status: 500
-            );
-        }
+        return $this->quotesService->removeFromFavourites($id);
         
     }
 
     public function nonFavourites(Request $request)
     {
-        try {
-            return $this->quotesService->getNonFavouriteQuotes($request);
-        } catch (\Throwable $th) {
-            return response(
-                ['error' => 'INTERNAL_ERROR'],
-                status: 500
-            );
-        }        
+        return $this->quotesService->getNonFavouriteQuotes($request);
     }
 }
