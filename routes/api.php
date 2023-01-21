@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\UserController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,10 +14,4 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::post('/register', [UserController::class, 'store']);
-
-Route::middleware('auth:api')->group(function () {
-    Route::get('me', [UserController::class, 'show']);
-    Route::patch('edit', [UserController::class, 'update']);
-    Route::delete('delete', [UserController::class, 'destroy']);
-});
+Route::apiResource('users', UserController::class)->except('index');
