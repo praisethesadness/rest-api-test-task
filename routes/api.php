@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\FavouriteQuoteController;
 use App\Http\Controllers\QuoteController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -16,8 +17,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::apiResource('users', UserController::class)->except('index');
+Route::apiResource('favourites', FavouriteQuoteController::class)->only(['store', 'destroy']);
 
 Route::get('quotes', [QuoteController::class, 'index']);
-Route::post('quotes/favourites/{id}', [QuoteController::class, 'addToFavourites']);
-Route::delete('quotes/favourites/{id}', [QuoteController::class, 'removeFromFavourites']);
-Route::get('quotes/non-favourites', [QuoteController::class, 'nonFavourites']);
+Route::get('quotes/non-favourites', [FavouriteQuoteController::class, 'nonFavourites']);
