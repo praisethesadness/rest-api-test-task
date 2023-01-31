@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 
 class CreateUserRequest extends FormRequest
@@ -25,8 +26,8 @@ class CreateUserRequest extends FormRequest
     {
         return [
             'name' => ['nullable'],
-            'username' => ['required', 'alpha'],
-            'email' => ['required', 'email'],
+            'username' => ['required', 'alpha', 'unique:'.User::class],
+            'email' => ['required', 'email', 'unique:'.User::class],
         ];
     }
 }

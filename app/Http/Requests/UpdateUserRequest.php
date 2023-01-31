@@ -25,7 +25,7 @@ class UpdateUserRequest extends FormRequest
     {
         return [
             'name' => ['sometimes'],
-            'username' => ['sometimes', 'alpha'],
+            'username' => ['sometimes', 'alpha', 'unique:'.User::class],
         ];
     }
 }
