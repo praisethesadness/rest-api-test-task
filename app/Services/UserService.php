@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Http\Requests\CreateUserRequest;
 use App\Http\Requests\UpdateUserRequest;
+use App\Http\Resources\UserResource;
 use App\Models\User;
 
 class UserService
@@ -24,13 +25,13 @@ class UserService
             return $this->errorMessage;
         }
 
-        return $user;
+        return new UserResource($user);
     }
 
     public function getUser()
     {
         try {
-            return auth()->user();
+            return new UserResource(auth()->user());
         } catch (\Throwable $th) {
             return $this->errorMessage;
         }
@@ -45,7 +46,7 @@ class UserService
             return $this->errorMessage;
         }        
 
-        return $user;
+        return new UserService($user);
     }
 
     public function deleteUser()
@@ -57,6 +58,6 @@ class UserService
             return $this->errorMessage;
         }
 
-        return $user;
+        return new UserService($user);
     }
 }
